@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import timeline from "./routers/timelineRouter.js";
+import signinRouter from "./routers/signinRouter.js";
 import signupRouter from "./routers/sigUpRouter.js";
 
 const app = express();
@@ -12,6 +13,7 @@ app.get("/status", (req, res) => {
 });
 
 app.use(timeline);
+app.use(signinRouter);
 app.use(signupRouter)
 
 app.listen(process.env.PORT, () => {
