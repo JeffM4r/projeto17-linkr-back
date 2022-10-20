@@ -15,8 +15,7 @@ async function signinMiddleware (req, res, next) {
       return res.status(400).send(message)
     }
     const existUser = await getUserByEmail(email)
-    if(!existUser.rows[0]) return res.sendStatus(400);
-    delete existUser.rows[0].password
+    if(!existUser.rows[0]) return res.sendStatus(401);
     res.locals.userInfo = existUser.rows[0]
     next()
   } catch (error) {
