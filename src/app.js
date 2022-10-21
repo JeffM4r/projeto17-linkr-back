@@ -3,9 +3,9 @@ import cors from "cors";
 import timeline from "./routers/timelineRouter.js";
 import signinRouter from "./routers/signinRouter.js";
 import signupRouter from "./routers/sigUpRouter.js";
-import postsRouter from "./routers/postsRouter.js";
+import publishPost from "./routers/publishRouter.js";
 import hashtagRouters from "./routers/hashtagRouters.js";
-import likesRouter from "./routers/postsRouter.js";
+// import likesRouter from "./routers/postsRouter.js";
 
 const app = express();
 app.use(cors());
@@ -18,9 +18,9 @@ app.get("/status", (req, res) => {
 app.use(timeline);
 app.use(signinRouter);
 app.use(signupRouter);
-app.use(postsRouter);
+app.use(publishPost);
 app.use(hashtagRouters);
-app.use(likesRouter);
+// app.use(likesRouter);
 
 app.listen(process.env.PORT, () => {
 	console.log(`Server listening on port ${process.env.PORT}.`);
