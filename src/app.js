@@ -4,6 +4,7 @@ import timeline from "./routers/timelineRouter.js";
 import signinRouter from "./routers/signinRouter.js";
 import signupRouter from "./routers/sigUpRouter.js";
 import postsRouter from "./routers/postsRouter.js";
+import hashtagRouters from "./routers/hashtagRouters.js";
 import likesRouter from "./routers/postsRouter.js";
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(timeline);
 app.use(signinRouter);
 app.use(signupRouter);
 app.use(postsRouter);
+app.use(hashtagRouters);
 app.use(likesRouter);
 
 app.listen(process.env.PORT, () => {
