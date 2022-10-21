@@ -5,4 +5,9 @@ async function insertPublish(url, text) {
     return promise
 }
 
-export { insertPublish }
+async function deletePublish(id){
+    const promise = await connection.query('UPDATE posts SET "deletedAt" = NOW() WHERE id = $1', [id])
+    return promise
+}
+
+export { insertPublish, deletePublish }

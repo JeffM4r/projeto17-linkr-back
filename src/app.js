@@ -3,7 +3,7 @@ import cors from "cors";
 import timeline from "./routers/timelineRouter.js";
 import signinRouter from "./routers/signinRouter.js";
 import signupRouter from "./routers/sigUpRouter.js";
-import publishPost from "./routers/publishRouter.js";
+import publishRouter from "./routers/publishRouter.js";
 import hashtagRouters from "./routers/hashtagRouters.js";
 // import likesRouter from "./routers/postsRouter.js";
 
@@ -18,7 +18,7 @@ app.get("/status", (req, res) => {
 app.use(timeline);
 app.use(signinRouter);
 app.use(signupRouter);
-app.use(publishPost);
+app.use(publishRouter);
 app.use(hashtagRouters);
 // app.use(likesRouter);
 
