@@ -5,7 +5,7 @@ import signinRouter from "./routers/signinRouter.js";
 import signupRouter from "./routers/sigUpRouter.js";
 import postsRouter from "./routers/postsRouter.js";
 import hashtagRouters from "./routers/hashtagRouters.js";
-import likesRouter from "./routers/postsRouter.js";
+import likesRouter from "./routers/likesRouter.js";
 
 const app = express();
 app.use(cors());
