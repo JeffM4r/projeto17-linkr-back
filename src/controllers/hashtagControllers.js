@@ -12,9 +12,11 @@ async function getHashtagsList (req, res) {
 
 async function getSpecificHashtag (req, res){
   const {hashtag} = req.params
- 
+  const userId = res.locals.userId
+  
+  const teste = "#" + hashtag
   try {
-    const postsList = await getNamedPosts(hashtag)
+    const postsList = await getNamedPosts(teste)
     return res.send(postsList.rows)
     
   } catch (error) {

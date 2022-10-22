@@ -14,6 +14,7 @@ async function getHashtags () {
 }
 
 async function getNamedPosts(hashtag){
+
   const promise = await connection.query(`
     SELECT
       users.id, users.name, users.picture, posts.id AS "postId", posts.text, posts.url
