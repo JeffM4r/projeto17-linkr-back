@@ -16,10 +16,12 @@ async function postPublish(req, res) {
 }
 
 async function postDeletePublish(req, res) {
-	const { id } = res.locals.id;
+	// const { id } = res.locals.id;
+	const userId = res.locals.userId;
+	const id = req.params.id
 	console.log(id);
 	try {
-		const deleteAt = await deletePublish(id);
+		const deleteAt = await deletePublish(id, userId);
 		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);

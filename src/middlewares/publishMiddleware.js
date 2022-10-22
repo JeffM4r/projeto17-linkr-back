@@ -1,4 +1,4 @@
 export function deletePublishMiddleware(req, res, next) {
-    res.locals.id = req.params
+    res.locals.id = req.params.id   
     next()
 }
