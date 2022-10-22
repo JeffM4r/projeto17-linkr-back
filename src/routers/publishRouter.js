@@ -10,9 +10,7 @@ import { deletePublishMiddleware } from "../middlewares/publishMiddleware.js";
 const router = express.Router();
 router.post("/post", tokenVerification, publishMiddleware, postPublish);
 router.delete(
-	"/post/:id",
-	deletePublishMiddleware,
-	tokenVerification,
+	"/post/:id", tokenVerification,
 	postDeletePublish,
 );
 

@@ -8,10 +8,11 @@ async function insertPublish(url, text, userId) {
 	return promise;
 }
 
-async function deletePublish(id) {
+async function deletePublish(id, userId) {
+	console.log("aqui" + id)
 	const promise = await connection.query(
-		'UPDATE posts SET "deletedAt" = NOW() WHERE id = $1',
-		[id],
+		'UPDATE posts SET "deletedAt" = NOW() WHERE id = $1 AND "userId" = $2',
+		[id, userId],
 	);
 	return promise;
 }
