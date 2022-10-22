@@ -8,7 +8,7 @@ async function getHashtags () {
     hashtags.text
   FROM "postsHashtags" AS middle
   JOIN hashtags ON middle."hashtagId" = hashtags.id
-  GROUP BY hashtags.id ORDER BY count DESC;
+  GROUP BY hashtags.id ORDER BY count DESC LIMIT 10;
   `)
   return promise;
 }
