@@ -1,40 +1,39 @@
-import connection from '../db/database.js'
+import connection from "../db/database.js";
 
-async function getUserInfo (req, res) {
-  const userId = req.params.id
+async function getUserInfo(req, res) {
+	const userInfoId = req.params.id;
+	const userId = res.locals.userId;
 
-  try {
-
-    const userPromise = await connection.query(`
+	try {
+		const userPromise = await connection.query(
+			`
     SELECT 
       users.id,
       users.name,
       users.picture
     FROM users 
     WHERE "id" = $1;
-    `, [userId])
+    `,
+			[userInfoId],
+		);
 
-    if(!userPromise.rows[0]) return res.sendStatus(404)
+		if (!userPromise.rows[0]) return res.sendStatus(404);
 
-    const postPromise = await connection.query(`
-    SELECT 
-      *
-    FROM posts 
-    WHERE "userId" = $1;
-    `, [userId])
+		const postPromise = await connection.query(
+			`SELECT users.id AS "userId", users.name, users.picture, posts.id AS "postId", posts.text, posts.url, posts."userId" = $1 AS owner, a."postId" = "postId" AS liked FROM posts JOIN users ON posts."userId" = users.id LEFT JOIN (SELECT "postId" FROM likes WHERE likes."userId" = $1) AS a ON a."postId" = posts.id WHERE posts."deletedAt" IS NULL AND posts."userId" = $2 ORDER BY posts."createdAt" DESC LIMIT 20;`,
+			[userId, userInfoId],
+		);
 
-    const body = {
-      ...userPromise.rows[0],
-      posts: postPromise.rows
-    }
+		const body = {
+			...userPromise.rows[0],
+			posts: postPromise.rows,
+		};
 
-    res.send(body)
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(500)
-  }
+		res.send(body);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
+	}
 }
 
-export {
-  getUserInfo
-}
+export { getUserInfo };
