@@ -17,6 +17,7 @@ async function dislike(req, res) {
 	const userId = res.locals.userId;
 	try {
 		deleteLike(userId, postId);
+		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);

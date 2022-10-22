@@ -1,8 +1,9 @@
-import * as timelineRepository from "../repositories/timelineRepository.js";
+import { getPosts } from "../repositories/timelineRepository.js";
 
 async function timeline(req, res) {
+	const userId = res.locals.userId;
 	try {
-		const posts = await timelineRepository.getPosts();
+		const posts = await getPosts(userId);
 		return res.status(200).send(posts.rows);
 	} catch (error) {
 		console.log(error);
