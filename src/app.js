@@ -7,13 +7,14 @@ import publishRouter from "./routers/publishRouter.js";
 import hashtagRouters from "./routers/hashtagRouters.js";
 import likesRouter from "./routers/likesRouter.js";
 import userRouter from "./routers/userRouter.js";
+import postsRouter from "./routers/postsRouter.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get("/status", (req, res) => {
-	res.send("Ok");
+   res.send("Ok");
 });
 
 app.use(timeline);
@@ -23,7 +24,8 @@ app.use(publishRouter);
 app.use(hashtagRouters);
 app.use(likesRouter);
 app.use(userRouter)
+app.use(postsRouter);
 
 app.listen(process.env.PORT, () => {
-	console.log(`Server listening on port ${process.env.PORT}.`);
+   console.log(`Server listening on port ${process.env.PORT}.`);
 });
