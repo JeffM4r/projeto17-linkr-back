@@ -1,4 +1,8 @@
-import { insertLike, deleteLike } from "../repositories/likesRepository.js";
+import {
+	insertLike,
+	deleteLike,
+	getCountLikes,
+} from "../repositories/likesRepository.js";
 
 async function like(req, res) {
 	const postId = req.params.postId;
@@ -24,4 +28,15 @@ async function dislike(req, res) {
 	}
 }
 
-export { like, dislike };
+async function getLikes(req, res) {
+	const postId = req.params.postId;
+	try {
+		const likes = await getCountLikes(postId);
+		return res.status(200).send(likes.rows[0]);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+}
+
+export { like, dislike, getLikes };

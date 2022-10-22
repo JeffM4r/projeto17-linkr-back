@@ -4,7 +4,6 @@ async function timeline(req, res) {
 	const userId = res.locals.userId;
 	try {
 		const posts = await getPosts(userId);
-		console.log(posts.rows);
 		return res.status(200).send(posts.rows);
 	} catch (error) {
 		console.log(error);
