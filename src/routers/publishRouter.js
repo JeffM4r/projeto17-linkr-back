@@ -2,6 +2,7 @@ import express from "express";
 import {
 	postPublish,
 	postDeletePublish,
+	postsHashtags
 } from "../controllers/publishController.js";
 import { publishMiddleware } from "../middlewares/schemasMiddleware.js";
 import { tokenVerification } from "../middlewares/tokenValidationMiddleware.js";
@@ -13,5 +14,6 @@ router.delete(
 	"/post/:id", tokenVerification,
 	postDeletePublish,
 );
+router.post("/hashtags", postsHashtags)
 
 export default router;
