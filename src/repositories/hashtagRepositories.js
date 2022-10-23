@@ -2,13 +2,7 @@ import connection from '../db/database.js'
 
 async function getHashtags () {
   const promise = connection.query(`
-  SELECT 
-    COUNT("hashtagId"),
-    hashtags.id,
-    hashtags.text
-  FROM "postsHashtags" AS middle
-  JOIN hashtags ON middle."hashtagId" = hashtags.id
-  GROUP BY hashtags.id ORDER BY count DESC LIMIT 10;
+  SELECT count(text),hashtags.text FROM "hashtags" GROUP BY text ORDER BY count(text) DESC LIMIT 10
   `)
   return promise;
 }
