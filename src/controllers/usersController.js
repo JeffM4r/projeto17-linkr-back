@@ -1,12 +1,13 @@
 import connection from "../db/database.js";
+import { getUsers } from "../repositories/timelineRepository.js";
 
 async function getUserInfo(req, res) {
-	const userInfoId = req.params.id;
-	const userId = res.locals.userId;
+   const userInfoId = req.params.id;
+   const userId = res.locals.userId;
 
-	try {
-		const userPromise = await connection.query(
-			`
+   try {
+      const userPromise = await connection.query(
+         `
     SELECT 
       users.id,
       users.name,
@@ -14,26 +15,38 @@ async function getUserInfo(req, res) {
     FROM users 
     WHERE "id" = $1;
     `,
-			[userInfoId],
-		);
+         [userInfoId]
+      );
 
-		if (!userPromise.rows[0]) return res.sendStatus(404);
+      if (!userPromise.rows[0]) return res.sendStatus(404);
 
-		const postPromise = await connection.query(
-			`SELECT users.id AS "userId", users.name, users.picture, posts.id AS "postId", posts.text, posts.url, posts."userId" = $1 AS owner, a."postId" = "postId" AS liked FROM posts JOIN users ON posts."userId" = users.id LEFT JOIN (SELECT "postId" FROM likes WHERE likes."userId" = $1) AS a ON a."postId" = posts.id WHERE posts."deletedAt" IS NULL AND posts."userId" = $2 ORDER BY posts."createdAt" DESC LIMIT 20;`,
-			[userId, userInfoId],
-		);
+      const postPromise = await connection.query(
+         `SELECT users.id AS "userId", users.name, users.picture, posts.id AS "postId", posts.text, posts.url, posts."userId" = $1 AS owner, a."postId" = "postId" AS liked FROM posts JOIN users ON posts."userId" = users.id LEFT JOIN (SELECT "postId" FROM likes WHERE likes."userId" = $1) AS a ON a."postId" = posts.id WHERE posts."deletedAt" IS NULL AND posts."userId" = $2 ORDER BY posts."createdAt" DESC LIMIT 20;`,
+         [userId, userInfoId]
+      );
 
-		const body = {
-			...userPromise.rows[0],
-			posts: postPromise.rows,
-		};
+      const body = {
+         ...userPromise.rows[0],
+         posts: postPromise.rows,
+      };
 
-		res.send(body);
-	} catch (error) {
-		console.log(error);
-		return res.sendStatus(500);
-	}
+      res.send(body);
+   } catch (error) {
+      console.log(error);
+      return res.sendStatus(500);
+   }
 }
 
-export { getUserInfo };
+async function searchUsers(req, res) {
+   const { username } = res.locals;
+   try {
+      const users = await getUsers(username);
+      res.send(users);
+   } catch (error) {
+      console.log(error.message);
+      res.sendStatus(500);
+      return;
+   }
+}
+
+export { getUserInfo, searchUsers };
