@@ -22,4 +22,15 @@ async function getCountLikes(PostId) {
 	return likes;
 }
 
-export { insertLike, deleteLike, getCountLikes };
+async function getWhoLiked (userId, PostId) {
+	const whoLiked = connection.query(
+		`SELECT 
+			users.name
+		FROM likes
+		JOIN users ON users.id = likes."userId"
+		WHERE likes."postId" = $1 AND users.id NOT IN ($2) LIMIT 2;`, [PostId, userId]
+	)
+	return whoLiked;
+}
+
+export { insertLike, deleteLike, getCountLikes, getWhoLiked };

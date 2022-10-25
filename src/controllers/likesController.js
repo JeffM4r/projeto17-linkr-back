@@ -2,6 +2,7 @@ import {
 	insertLike,
 	deleteLike,
 	getCountLikes,
+	getWhoLiked,
 } from "../repositories/likesRepository.js";
 
 async function like(req, res) {
@@ -30,9 +31,15 @@ async function dislike(req, res) {
 
 async function getLikes(req, res) {
 	const postId = req.params.postId;
+	const userId = res.locals.userId;
 	try {
 		const likes = await getCountLikes(postId);
-		return res.status(200).send(likes.rows[0]);
+		const whoLiked = await getWhoLiked(userId, postId);
+		const response = {
+			...likes.rows[0],
+			whoLiked: whoLiked.rows
+		}
+		return res.status(200).send(response);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);

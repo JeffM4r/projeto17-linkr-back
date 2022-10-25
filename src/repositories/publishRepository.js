@@ -11,7 +11,7 @@ async function insertPublish(url, text, userId) {
 async function deletePublish(id, userId) {
 	console.log("aqui" + id)
 	const promise = await connection.query(
-		'UPDATE posts SET "deletedAt" = NOW() WHERE id = $1 AND "userId" = $2',
+		'UPDATE posts SET "deletedAt" = NOW() WHERE id = $1 AND "userId" = $2;',
 		[id, userId],
 	);
 	return promise;
