@@ -16,7 +16,7 @@ async function signin(req, res) {
          process.env.SECRET_TOKEN
       );
 
-      res.send({ token: token, picture: userInfo.picture });
+      res.send({ token: token, picture: userInfo.picture ,userId: userInfo.id});
    } catch (error) {
       console.log(error);
       return res.sendStatus(500);
