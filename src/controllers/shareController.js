@@ -1,4 +1,4 @@
-import { insertShare } from "../repositories/shareRepository.js"
+import { getCountShareById, insertShare } from "../repositories/shareRepository.js"
 
 async function sharePost (req, res) {
   const userId = res.locals.userId
@@ -13,6 +13,18 @@ async function sharePost (req, res) {
   }
 }
 
+async function getCountShare (req, res) {
+  const postId = req.params.postId
+  try {
+    const count = await getCountShareById(postId)
+    return res.send(count.rows[0])
+  } catch (error) {
+    console.log(error)
+    return res.sendStatus(500)
+  }
+}
+
 export {
-  sharePost
+  sharePost,
+  getCountShare
 }
