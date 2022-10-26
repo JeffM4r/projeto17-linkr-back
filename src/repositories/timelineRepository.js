@@ -8,11 +8,11 @@ async function getPosts(userId) {
    return posts;
 }
 
-async function getUsers(username) {
+async function getUsers(userId,username) {
    const users = (
       await connection.query(
-         'SELECT id,name,picture FROM users WHERE lower(name) LIKE $1 LIMIT 6;',
-         [`${username}%`]
+         'SELECT users.id,name,picture,follow.id AS "followId" FROM users LEFT JOIN follow ON follow."followedId" = users.id WHERE lower(name) LIKE $2 AND users.id <> $1 ORDER BY "followerId" = $1 LIMIT 6;',
+         [userId,`${username}%`]
       )
    ).rows;
    return users;

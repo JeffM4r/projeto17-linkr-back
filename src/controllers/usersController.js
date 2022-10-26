@@ -40,8 +40,9 @@ async function getUserInfo(req, res) {
 
 async function searchUsers(req, res) {
    const { username } = res.locals;
+   const {userId} = res.locals
    try {
-      const users = await getUsers(username);
+      const users = await getUsers(userId,username);
       res.send(users);
    } catch (error) {
       console.log(error.message);

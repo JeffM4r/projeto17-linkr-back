@@ -6,7 +6,7 @@ import { searchUsersMiddleware } from '../middlewares/usersMiddleware.js';
 const router = express.Router();
 
 router.get("/user/:id", tokenVerification, getUserInfo);
-router.get('/search/:username',searchUsersMiddleware, searchUsers)
+router.get('/search/:username',tokenVerification,searchUsersMiddleware, searchUsers)
 router.post('/follow/:followedId',tokenVerification, followUser)
 router.delete('/follow/:followedId',tokenVerification, unfollowUser)
 router.get('/follow/:followedId', tokenVerification, getIsFollowing)
