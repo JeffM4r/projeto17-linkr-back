@@ -15,3 +15,11 @@ export async function deleteFollow(followerId, followedId) {
    );
    return promise;
 }
+
+export async function isFollowing(followerId, followedId) {
+   const promise = await connection.query(
+      'SELECT * FROM follow WHERE "followerId" = $1 AND "followedId" = $2;',
+      [followerId, followedId]
+   );
+   return promise;
+}
