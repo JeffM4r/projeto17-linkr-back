@@ -1,5 +1,6 @@
 import connection from "../db/database.js";
 import { getUsers } from "../repositories/timelineRepository.js";
+import { deleteFollow, insertFollow, isFollowing } from "../repositories/userRepositories.js";
 
 async function getUserInfo(req, res) {
    const userInfoId = req.params.id;
@@ -39,8 +40,9 @@ async function getUserInfo(req, res) {
 
 async function searchUsers(req, res) {
    const { username } = res.locals;
+   const {userId} = res.locals
    try {
-      const users = await getUsers(username);
+      const users = await getUsers(userId,username);
       res.send(users);
    } catch (error) {
       console.log(error.message);
@@ -49,4 +51,47 @@ async function searchUsers(req, res) {
    }
 }
 
-export { getUserInfo, searchUsers };
+async function followUser(req,res){
+   const followerId = res.locals.userId 
+   const {followedId} = req.params
+   try {
+      await insertFollow(followerId, followedId)
+      res.sendStatus(201)
+   } catch (error) {
+      console.log(error.message)
+      res.sendStatus(500)
+      return
+   }
+}
+
+async function unfollowUser(req,res){
+   const followerId = res.locals.userId 
+   const {followedId} = req.params
+   try {
+      await deleteFollow(followerId, followedId)
+      res.sendStatus(204)
+   } catch (error) {
+      console.log(error.message)
+      res.sendStatus(500)
+      return
+   }
+}
+
+async function getIsFollowing(req,res){
+   const followerId = res.locals.userId 
+   const {followedId} = req.params
+   let bool = false
+   try {
+      const follow = (await isFollowing(followerId, followedId)).rows[0]
+      if (follow) {
+         bool = true
+      }
+      res.send({bool,userId:followerId})
+   } catch (error) {
+      console.log(error.message)
+      res.sendStatus(500)
+      return
+   }
+}
+
+export { getUserInfo, searchUsers, followUser, unfollowUser, getIsFollowing };
