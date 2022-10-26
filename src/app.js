@@ -8,6 +8,7 @@ import hashtagRouters from "./routers/hashtagRouters.js";
 import likesRouter from "./routers/likesRouter.js";
 import userRouter from "./routers/userRouter.js";
 import postsRouter from "./routers/postsRouter.js";
+import shareRouter from "./routers/shareRouter.js"
 
 const app = express();
 app.use(cors());
@@ -25,6 +26,7 @@ app.use(hashtagRouters);
 app.use(likesRouter);
 app.use(userRouter)
 app.use(postsRouter);
+app.use(shareRouter)
 
 app.listen(process.env.PORT, () => {
    console.log(`Server listening on port ${process.env.PORT}.`);
