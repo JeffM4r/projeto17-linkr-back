@@ -32,6 +32,16 @@ async function insertShare (userId, postId) {
   return insert;
 }
 
+async function verifySharedByUser (userId, postId) {
+  const count = await connection.query(`
+  SELECT
+    COUNT(id)
+  FROM "sharedPosts" AS sh
+  WHERE sh."userId" = $1 AND sh."postId" = $2;
+  `, [userId, postId])
+  return count;
+}
+
 async function getCountShareById (postId) {
   const count = await connection.query(`
   SELECT
@@ -45,5 +55,6 @@ async function getCountShareById (postId) {
 export {
   getShares,
   insertShare,
-  getCountShareById
+  getCountShareById,
+  verifySharedByUser
 }

@@ -1,10 +1,12 @@
-import { getCountShareById, insertShare } from "../repositories/shareRepository.js"
+import { getCountShareById, insertShare, verifySharedByUser } from "../repositories/shareRepository.js"
 
 async function sharePost (req, res) {
   const userId = res.locals.userId
   const postId = req.params.postId
 
   try {
+    const verifyShared = await verifySharedByUser(userId, postId)
+    if(parseInt(verifyShared.rows[0].count) > 0) return res.sendStatus(409);
     await insertShare(userId, postId)
     return res.sendStatus(201)
   } catch (error) {
