@@ -1,5 +1,5 @@
 import connection from "../db/database.js";
-import { getUsers } from "../repositories/timelineRepository.js";
+import { getUsersFollowers, getUsersNotFollowers } from "../repositories/timelineRepository.js";
 import { deleteFollow, insertFollow, isFollowing } from "../repositories/userRepositories.js";
 
 async function getUserInfo(req, res) {
@@ -42,8 +42,9 @@ async function searchUsers(req, res) {
    const { username } = res.locals;
    const {userId} = res.locals
    try {
-      const users = await getUsers(userId,username);
-      res.send(users);
+      const users = await getUsersNotFollowers(userId,username);
+      const followers = await getUsersFollowers(userId,username)
+      res.send([users,followers]);
    } catch (error) {
       console.log(error.message);
       res.sendStatus(500);

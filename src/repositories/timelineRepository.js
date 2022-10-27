@@ -8,14 +8,24 @@ async function getPosts(userId) {
    return posts;
 }
 
-async function getUsers(userId,username) {
+async function getUsersNotFollowers(userId, username) {
    const users = (
       await connection.query(
-         'SELECT users.id,name,picture,follow.id AS "followId" FROM users LEFT JOIN follow ON follow."followedId" = users.id WHERE lower(name) LIKE $2 AND users.id <> $1 ORDER BY "followerId" = $1 LIMIT 6;',
-         [userId,`${username}%`]
+         'SELECT users.id,name,picture FROM users LEFT JOIN follow ON follow."followedId" = users.id WHERE users.id NOT IN(SELECT users.id FROM users LEFT JOIN follow ON follow."followedId" = users.id WHERE "followerId" = $1 AND lower(name) LIKE $2 ORDER BY "followerId" = $1 LIMIT 6) AND lower(name) LIKE $2 LIMIT 6;',
+         [userId, `${username}%`]
       )
    ).rows;
    return users;
 }
 
-export { getPosts, getUsers };
+async function getUsersFollowers(userId, username) {
+   const users = (
+      await connection.query(
+         'SELECT users.id,name,picture FROM users LEFT JOIN follow ON follow."followedId" = users.id WHERE "followerId" = $1 AND lower(name) LIKE $2 ORDER BY "followerId" = $1 LIMIT 6',
+         [userId, `${username}%`]
+      )
+   ).rows;
+   return users;
+}
+
+export { getPosts, getUsersNotFollowers, getUsersFollowers };
