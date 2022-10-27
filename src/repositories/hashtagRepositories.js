@@ -17,12 +17,24 @@ async function getNamedPosts(hashtag){
     JOIN posts ON middle."postId" = posts.id
     JOIN users ON posts."userId" = users.id
     WHERE hashtags.text = $1
+    ORDER BY posts."createdAt" DESC
   `,[hashtag])
+
+  return promise
+}
+
+async function deleteHashtags(postId){
+
+  const promise = await connection.query(`
+    DELETE FROM "postsHashtags"
+      WHERE "postsHashtags"."postId" = $1
+  `,[postId])
 
   return promise
 }
 
 export {
   getHashtags,
-  getNamedPosts
+  getNamedPosts,
+  deleteHashtags
 }
