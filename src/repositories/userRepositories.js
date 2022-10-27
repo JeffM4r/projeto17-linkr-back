@@ -23,3 +23,11 @@ export async function isFollowing(followerId, followedId) {
    );
    return promise;
 }
+
+export async function numFollowers(userId) {
+   const promise = await connection.query(
+      'SELECT COUNT(id) FROM follow WHERE "followerId" = $1',
+      [userId]
+   );
+   return promise;
+}
