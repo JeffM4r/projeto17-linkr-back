@@ -1,6 +1,6 @@
 import connection from "../db/database.js";
 import { getUsersFollowers, getUsersNotFollowers } from "../repositories/timelineRepository.js";
-import { deleteFollow, insertFollow, isFollowing } from "../repositories/userRepositories.js";
+import { deleteFollow, insertFollow, isFollowing, numFollowers } from "../repositories/userRepositories.js";
 
 async function getUserInfo(req, res) {
    const userInfoId = req.params.id;
@@ -95,4 +95,15 @@ async function getIsFollowing(req,res){
    }
 }
 
-export { getUserInfo, searchUsers, followUser, unfollowUser, getIsFollowing };
+async function getNumFollow(req,res){
+   const {userId} = res.locals
+   try {
+      const lengthFollowArray = (await numFollowers(userId))?.rows[0]?.count
+      res.send(lengthFollowArray)
+   } catch (error) {
+      console.log(error.message)
+      res.sendStatus(500)
+   }
+}
+
+export { getUserInfo, searchUsers, followUser, unfollowUser, getIsFollowing, getNumFollow };
