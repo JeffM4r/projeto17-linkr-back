@@ -1,4 +1,4 @@
-import { getHashtags,getNamedPosts } from '../repositories/hashtagRepositories.js'
+import { getHashtags,getNamedPosts, deleteHashtags } from '../repositories/hashtagRepositories.js'
 
 async function getHashtagsList (req, res) {
   try {
@@ -26,7 +26,21 @@ async function getSpecificHashtag (req, res){
 
 }
 
+async function deleteOldHashtags(req,res){
+  const {postId} = req.params
+
+  try {
+    await deleteHashtags(postId)
+
+    return res.sendStatus(200)
+  } catch (error) {
+    console.log(error)
+    return res.sendStatus(500)
+  }
+}
+
 export {
   getHashtagsList,
-  getSpecificHashtag
+  getSpecificHashtag,
+  deleteOldHashtags
 }
