@@ -18,6 +18,14 @@ async function getPostComments (userId, postId) {
   return comments;
 }
 
+async function insertComment (userId, postId, text) {
+  const comment = connection.query(`
+  INSERT INTO comments ("userId", "postId", text) VALUES ($1, $2, $3);
+  `, [userId, postId, text]);
+  return comment;
+}
+
 export {
-  getPostComments
+  getPostComments,
+  insertComment
 }
