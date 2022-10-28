@@ -9,6 +9,7 @@ async function getPosts(userId) {
       posts.text, 
       posts.url, 
       posts."userId" = $1 AS owner, 
+      posts."createdAt",
       a."postId" = "postId" AS liked 
    FROM posts 
    JOIN users ON posts."userId" = users.id 
@@ -17,8 +18,7 @@ async function getPosts(userId) {
    WHERE posts."deletedAt" IS NULL AND
    posts."userId" IN (SELECT "followedId" FROM follow WHERE "followerId" = $1) OR posts."userId" = $1
    ORDER BY posts."createdAt" DESC;`,
-   [userId]
-   );
+   [userId]);
 
    return posts;
 }
