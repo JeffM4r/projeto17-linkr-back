@@ -13,7 +13,8 @@ async function getPostComments (userId, postId) {
   FROM comments 
   JOIN users ON comments."userId" = users.id 
   JOIN posts ON posts.id = $2
-  WHERE comments."postId" = $2;
+  WHERE comments."postId" = $2
+  ORDER BY comments.id;
   `, [userId, postId]);
   return comments;
 }
