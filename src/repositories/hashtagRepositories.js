@@ -7,18 +7,28 @@ async function getHashtags () {
   return promise;
 }
 
-async function getNamedPosts(hashtag){
+async function getNamedPosts(hashtag, userId){
 
   const promise = await connection.query(`
     SELECT
-      users.id, users.name, users.picture, posts.id AS "postId", posts.text, posts.url
+      users.id AS "userId", 
+      users.name, users.picture, 
+      posts.id AS "postId", 
+      posts.text, 
+      posts.url,
+      posts."userId" = $1 AS owner,
+      posts."createdAt",
+      a."postId" = middle."postId" AS liked
     FROM hashtags
     JOIN "postsHashtags" AS middle ON middle."hashtagId" = hashtags.id
     JOIN posts ON middle."postId" = posts.id
     JOIN users ON posts."userId" = users.id
-    WHERE hashtags.text = $1
+    LEFT JOIN (SELECT "postId" FROM likes 
+               WHERE likes."userId" = $1 ) AS a ON a."postId" = posts.id
+    WHERE posts."deletedAt" IS NULL
+    AND hashtags.text = $2
     ORDER BY posts."createdAt" DESC
-  `,[hashtag])
+  `,[userId, hashtag])
 
   return promise
 }
